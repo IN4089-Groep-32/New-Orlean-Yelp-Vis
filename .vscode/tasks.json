@@ -1,0 +1,23 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Install dependencies",
+            "type": "npm",
+            "script": "install",
+            "path": "frontend/"
+        },
+        {
+            "label": "Publish frontend",
+            "type": "npm",
+            "script": "publish",
+            "path": "frontend/"
+        },
+        {
+            "label": "Start frontend",
+            "type": "npm",
+            "script": "start",
+            "path": "frontend/"
+        }
+    ]
+}
