@@ -2,6 +2,7 @@
     <div>
         <NavBar class="nav" />
         <router-view class="map">router view</router-view>
+        <!-- <router-view class="content">content view</router-view> -->
     </div>
     <!-- <Footer /> -->
     <!-- <Map> </Map> -->
@@ -47,6 +48,11 @@ body {
 .map {
     height: 75%;
     width: 100%;
+}
+
+.content {
+    height: 75%;
+    width: 50%;
 }
 
 div {
