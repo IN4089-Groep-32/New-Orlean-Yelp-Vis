@@ -15,13 +15,13 @@
                 <label for="word"> word stream <input type="radio" v-model="comp" value="word" /></label>
             </div>
             <div id="star_container" class="svg-container" style="width: 75%">
-                <StarComponent :business_id=this.biz_id :svgWidth="svgWidth" v-if="star_comp" />
+                <StarComponent :key=this.biz_id :business_id="business_id" :svgWidth="svgWidth" v-if="star_comp" />
             </div>
             <div id="star_container" class="svg-container" style="width: 100%">
-                <BoxComponent style="width: 100%" :business_id=this.biz_id :svgWidth="svgWidth" v-if="box_comp" />
+                <BoxComponent style="width: 100%" :key=this.biz_id :business_id="business_id" :svgWidth="svgWidth" v-if="box_comp" />
             </div>
             <div id="stream_container" class="svg-container" style="width: 100%">
-                <WordstreamComponent :business_id=this.biz_id :svgWidth="streamWidth" v-if="word_comp" />
+                <WordstreamComponent :business_id="business_id" :key=this.biz_id :svgWidth="streamWidth" v-if="word_comp" />
             </div>
         </div>
         <div ref="popup" class="ol-popup">
@@ -197,7 +197,7 @@ export default {
                 style: styleFunction,
             });
             map.addLayer(vectorLayer);
-            map.on('click', function (evt) {
+            map.on('click', (evt) => {
                 if (map.forEachFeatureAtPixel(evt.pixel,
                     function (feat) {
                         return fromJsonFeatures.includes(feat);
@@ -213,10 +213,12 @@ export default {
                     this.biz_id = business_id;
                     this.name = name;
                     // const hdms = toStringHDMS(toLonLat(coordinate));
-                    content.innerHTML = '<p>You choosed: </p>' + business_id;
+                    content.innerHTML = '<p>You choosed: </p>' + name;
                     // $( "#graph" ).load(window.location.href + " #graph" );
                     // update graph using the new biz_id
-                    console.log(this.biz_id)
+                    // console.log(this.biz_id)
+                    // const graph = this.$refs.graph;
+                    // this.comp = "star";
                     
                     // content.innerHTML = '<p>You choosed: </p><a href=/review/' + business_id + '/' + name + '>' + name + '</a > ';
                     overlay.setPosition(coordinate);
