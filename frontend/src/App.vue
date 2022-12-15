@@ -4,6 +4,7 @@
         <router-view class="map">router view</router-view>
         <!-- <router-view class="content">content view</router-view> -->
     </div>
+    
     <!-- <Footer /> -->
     <!-- <Map> </Map> -->
 </template>
@@ -17,6 +18,7 @@ export default {
     components: {
         // Map
         NavBar,
+        // NavigateBar,
         /* Footer*/
     }
 };
@@ -50,10 +52,6 @@ body {
     width: 100%;
 }
 
-.content {
-    height: 75%;
-    width: 50%;
-}
 
 div {
     padding: 0;
@@ -61,8 +59,15 @@ div {
     height: 100%;
 }
 
+/* .nav {
+    width: 100%;
+    height: 15%;
+} */
+
 .nav {
+    left: 0px;
     width: 100%;
     height: 15%;
 }
+
 </style>

@@ -14,6 +14,9 @@
             <div>
                 <label for="word"> word stream <input type="radio" v-model="comp" value="word" /></label>
             </div>
+            <div>
+                <label for="scatter"> scatter plot <input type="radio" v-model="comp" value="scatter" /></label>
+            </div>
             <div id="star_container" class="svg-container" style="width: 75%">
                 <StarComponent :key=this.biz_id :business_id="business_id" :svgWidth="svgWidth" v-if="star_comp" />
             </div>
@@ -22,6 +25,9 @@
             </div>
             <div id="stream_container" class="svg-container" style="width: 100%">
                 <WordstreamComponent :business_id="business_id" :key=this.biz_id :svgWidth="streamWidth" v-if="word_comp" />
+            </div>
+            <div id="star_container" class="svg-container" style="width: 100%">
+                <ScatterPlotComponent :business_id="business_id" :key=this.biz_id :svgWidth="svgWidth" v-if="scatter_comp" />
             </div>
         </div>
         <div ref="popup" class="ol-popup">
@@ -50,6 +56,7 @@ import CONSTANTS from '../constants';
 import StarComponent from "@/components/StarComponent";
 import WordstreamComponent from "@/components/WordstreamComponent";
 import BoxComponent from "@/components/BoxComponent";
+import ScatterPlotComponent from "@/components/ScatterPlotComponent";
 
 export default {
     name: "TheMap",
@@ -58,6 +65,7 @@ export default {
         StarComponent,
         WordstreamComponent,
         BoxComponent,
+        ScatterPlotComponent,
     },
     props: {},
     computed: {
@@ -72,6 +80,9 @@ export default {
         },
         word_comp() {
             return this.comp == "word";
+        },
+        scatter_comp() {
+            return this.comp == "scatter";
         },
     },
     data() {

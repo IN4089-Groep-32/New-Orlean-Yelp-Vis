@@ -24,5 +24,6 @@ CONSTANTS.PRECOMPUTED_DATA.REVIEWS_CONTENT = "../../precomputed_data/reviews_con
 CONSTANTS.PRECOMPUTED_DATA.BOX = "../../precomputed_data/box/"
 CONSTANTS.PRECOMPUTED_DATA.WORDSTREAM = "../../precomputed_data/ws/"
 CONSTANTS.PRECOMPUTED_DATA.STAR = "../../precomputed_data/star/"
+CONSTANTS.PRECOMPUTED_DATA.SCATTERPLOT = "../../precomputed_data/reviews_count/"
 
 export default CONSTANTS;
