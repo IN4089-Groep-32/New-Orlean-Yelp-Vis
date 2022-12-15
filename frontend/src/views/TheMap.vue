@@ -26,8 +26,8 @@
             <div id="stream_container" class="svg-container" style="width: 100%">
                 <WordstreamComponent :business_id="business_id" :key=this.biz_id :svgWidth="streamWidth" v-if="word_comp" />
             </div>
-            <div id="star_container" class="svg-container" style="width: 100%">
-                <ScatterPlotComponent :business_id="business_id" :key=this.biz_id :svgWidth="svgWidth" v-if="scatter_comp" />
+            <div id="stream_container" class="svg-container" style="width: 100%">
+                <ScatterPlotComponent :business_id="business_id" :key=this.biz_id :svgWidth="streamWidth" v-if="scatter_comp" />
             </div>
         </div>
         <div ref="popup" class="ol-popup">
@@ -229,6 +229,9 @@ export default {
                     const coordinate = evt.coordinate;
                     this.biz_id = business_id;
                     this.name = name;
+                    // const child = ref('scatter_child');
+                    // child.fetch_review_content(business_id);
+                    // this.$refs.scatter_child.fetch_review_content();
                     // const hdms = toStringHDMS(toLonLat(coordinate));
                     content.innerHTML = '<p>You choosed: </p>' + name;
                     // $( "#graph" ).load(window.location.href + " #graph" );

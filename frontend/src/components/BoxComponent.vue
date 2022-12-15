@@ -54,7 +54,6 @@ export default {
     }),
     mounted() {
         d3fetch.json(CONSTANTS.PRECOMPUTED_DATA.BOX + this.business_id + "_box.json").then((star_data) => {
-        // d3fetch.json("/api/review/" + this.business_id).then((star_data) => {
             this.draw_box(star_data);
         });
         if (this.reviewId == "default") return "";

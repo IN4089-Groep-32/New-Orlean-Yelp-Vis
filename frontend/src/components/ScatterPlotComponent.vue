@@ -1,7 +1,14 @@
 <template>
-    <svg :width="svgWidth" :height="svgHeight">
-        <g ref="plot_svg"></g>
-    </svg>
+    <div style="width: 100%">
+        <svg :width="svgWidth" :height="svgHeight" style="display:inline">
+            <g ref="plot_svg"></g>
+        </svg>
+        <!-- <div style="display:inline width:10%">
+            <p>The total num of the reviews: {{ this.num }}</p>
+            <p>The average useful score of the reviews: {{ this.score }}</p>
+            <p>The chosen restaurant id: {{ this.biz_id }}</p>
+        </div> -->
+    </div>
 </template>
 
 <script>
@@ -33,6 +40,8 @@ export default {
     },
     data: () => ({
         svgMargin: { top: 10, right: 30, bottom: 30, left: 60 },
+        score: "default",
+        num: "default",
     }),
     mounted() {
         d3fetch.json(CONSTANTS.PRECOMPUTED_DATA.SCATTERPLOT + "review_count_stars.json").then((scatter_data) => {
@@ -40,6 +49,24 @@ export default {
         });
     },
     methods: {
+        fetch_review_content(biz_id) {
+            // if (this.score == "default") return "";
+            fetch(CONSTANTS.PRECOMPUTED_DATA.SCATTERPLOT + "review_count_stars.json")
+                .then(response => {
+                    if (!response.ok) {
+                        throw Error(response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(result => {
+                    var temp = biz_id
+                    this.score = result[temp].useful;
+                    this.num = result[temp].review_count;
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
         draw_scatter(scatter_data) {
             // append the svg object to the body of the page
             var svg = d3
@@ -53,7 +80,7 @@ export default {
 
             // Add X axis
             var x = d3.scaleLinear()
-                .domain([0, 5])
+                .domain([0, 11])
                 .range([0, this.gWidth]);
             svg.append("g")
                 .attr("transform", "translate(0," + this.gHeight + ")")
@@ -68,9 +95,8 @@ export default {
 
             var data = [];
             for (const [key, value] of Object.entries(scatter_data)) {
-                data.push({ stars: value.stars, review_count: value.review_count, id: key });
+                data.push({ stars: value.stars, review_count: value.review_count, useful: value.useful, id: key });
             }
-
             // Color scale: give me a specie name, I return a color
             // Add dots
             svg.append('g')
@@ -78,10 +104,33 @@ export default {
                 .data(data)
                 .enter()
                 .append("circle")
-                .attr("cx", (d) => x(d.stars))
+                .attr("cx", (d) => x(d.useful))
                 .attr("cy", (d) => y(d.review_count))
-                .attr("r", 5)
-                .attr("fill", "#69b3a2");
+                .attr("r", (d) => {
+                    return 4
+                })
+                .attr("fill", (d) => { 
+                    var color = ["#d7191c","#fdae61","#ffffbf","#a6d96a","#1a9641", "#000000"]
+                    // if (d.id == this.business_id) {
+                    //     return color[5]
+                    // }
+                    if (d.stars == 5 || d.stars == 4.5) {
+                        return color[4]
+                    } else if (d.stars == 4 || d.stars == 3.5) {
+                        return color[3]
+                    } else if (d.stars == 3 || d.stars == 2.5) {
+                        return color[2]
+                    } else if (d.stars == 2 || d.stars == 1.5) {
+                        return color[1]
+                    } else {
+                        return color[0]
+                    }
+                    
+                })
+                // .on("click", function (d, i) {
+                //     this.businessId = i.business_id
+                // })
+            
         },
     },
 };
