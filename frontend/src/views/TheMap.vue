@@ -35,6 +35,7 @@
 import View from "ol/View";
 import Map from "ol/Map";
 import TileLayer from "ol/layer/Tile";
+import {Heatmap as HeatmapLayer} from "ol/layer";
 import OSM from "ol/source/OSM";
 import { fromLonLat } from "ol/proj";
 import "ol/ol.css";
@@ -159,29 +160,22 @@ export default {
                 target: this.$refs['map'],
                 layers: [new TileLayer({ source: new OSM() })],
                 view: new View({
-                    zoom: 14,
-                    center: fromLonLat([-90.091533, 29.951065]),
+                    zoom: 12,
+                    center: fromLonLat([-90.091533, 29.971065]),
                     constrainResolution: true
                 }),
                 overlays: [overlay],
             });
             var style = new Style({
                 image: new CircleStyle({
-                    radius: 7,
+                    radius: 5,
                     stroke: new Stroke({ //边界样式
                         color: '#319FD3',
-                        width: 3
+                        width: 1
                     }),
                     fill: new Fill({ //⽮量图层填充颜⾊，以及透明度
                         color: 'rgba(255, 0, 0, 0.6)'
                     }),
-                }),
-                fill: new Fill({ //⽮量图层填充颜⾊，以及透明度
-                    color: 'rgba(255, 0, 0, 0.6)'
-                }),
-                stroke: new Stroke({ //边界样式
-                    color: '#319FD3',
-                    width: 5
                 }),
             });
             const styleFunction = function () {
@@ -194,9 +188,21 @@ export default {
             });
             var vectorLayer = new VectorLayer({
                 source: vectorSource,
-                style: styleFunction,
+                style: () => style,
             });
+
+            const heatmapLayer = new HeatmapLayer({
+                source: vectorSource,
+                blur: 100,
+                radius: 10,
+                weight: (feature) => {
+                    const review_count = feature.get('review_count');
+                    return (review_count + 2000) / 10000 * 5
+                },
+            });
+
             map.addLayer(vectorLayer);
+            map.addLayer(heatmapLayer);
             map.on('click', (evt) => {
                 if (map.forEachFeatureAtPixel(evt.pixel,
                     function (feat) {
