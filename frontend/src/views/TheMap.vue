@@ -5,29 +5,42 @@
         <div ref="graph" class="graph">
             <p>The chosen restaurant names: {{ this.name }}</p>
             <p>The chosen restaurant id: {{ this.biz_id }}</p>
-            <div>
-                <label for="star"> star plot <input type="radio" v-model="comp" value="star" /></label>
+            <div style="display: none;">
+                <div>
+                    <label for="star"> star plot <input type="radio" v-model="comp" value="star" /></label>
+                </div>
+                <div>
+                    <label for="box"> box plot <input type="radio" v-model="comp" value="box" /></label>
+                </div>
+                <div>
+                    <label for="word"> word stream <input type="radio" v-model="comp" value="word" /></label>
+                </div>
+                <div>
+                    <label for="scatter"> scatter plot <input type="radio" v-model="comp" value="scatter" /></label>
+                </div>
             </div>
-            <div>
-                <label for="box"> box plot <input type="radio" v-model="comp" value="box" /></label>
-            </div>
-            <div>
-                <label for="word"> word stream <input type="radio" v-model="comp" value="word" /></label>
-            </div>
-            <div>
-                <label for="scatter"> scatter plot <input type="radio" v-model="comp" value="scatter" /></label>
-            </div>
-            <div id="star_container" class="svg-container" style="width: 75%">
-                <StarComponent :key=this.biz_id :business_id="business_id" :svgWidth="svgWidth" v-if="star_comp" />
-            </div>
-            <div id="star_container" class="svg-container" style="width: 100%">
-                <BoxComponent style="width: 100%" :key=this.biz_id :business_id="business_id" :svgWidth="svgWidth" v-if="box_comp" />
-            </div>
-            <div id="stream_container" class="svg-container" style="width: 100%">
-                <WordstreamComponent :business_id="business_id" :key=this.biz_id :svgWidth="streamWidth" v-if="word_comp" />
-            </div>
-            <div id="stream_container" class="svg-container" style="width: 100%">
-                <ScatterPlotComponent :business_id="business_id" :key=this.biz_id :svgWidth="streamWidth" v-if="scatter_comp" />
+            <div class="plot-wrapper">
+                <div class="plot-content">
+                    <p>star plot</p>
+                    <div id="star_container" class="svg-container" style="width: 100%">
+                        <StarComponent :key=this.biz_id :business_id="business_id" :svgWidth="svgWidth" v-if="star_comp" />
+                    </div>
+                    <hr/>
+                    <p>box plot</p>
+                    <div id="star_container" class="svg-container" style="width: 100%">
+                        <BoxComponent style="width: 100%" :key=this.biz_id :business_id="business_id" :svgWidth="svgWidth" v-if="box_comp" />
+                    </div>
+                    <hr/>
+                    <p>word stream</p>
+                    <div id="stream_container" class="svg-container" style="width: 100%">
+                        <WordstreamComponent :business_id="business_id" :key=this.biz_id :svgWidth="streamWidth" v-if="word_comp" />
+                    </div>
+                    <hr/>
+                    <p>scatter plot</p>
+                    <div id="stream_container" class="svg-container" style="width: 100%">
+                        <ScatterPlotComponent :business_id="business_id" :key=this.biz_id :svgWidth="streamWidth" v-if="scatter_comp" />
+                    </div>
+                </div>
             </div>
         </div>
         <div ref="popup" class="ol-popup">
@@ -73,16 +86,16 @@ export default {
             return this.biz_id;
         },
         star_comp() {
-            return this.comp == "star";
+            return true;  // this.comp == "star";
         },
         box_comp() {
-            return this.comp == "box";
+            return true;  // this.comp == "box";
         },
         word_comp() {
-            return this.comp == "word";
+            return true;  // this.comp == "word";
         },
         scatter_comp() {
-            return this.comp == "scatter";
+            return true;  // this.comp == "scatter";
         },
     },
     data() {
@@ -261,6 +274,17 @@ export default {
     position: absolute;
     right: -2%;
     width: 50%;
+}
+
+div.plot-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 200px);
+}
+
+div.plot-content {
+    overflow-y: scroll;
+    flex: 0 1 auto;
 }
 
 .ol-popup {
