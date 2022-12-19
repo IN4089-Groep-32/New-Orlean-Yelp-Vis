@@ -94,8 +94,12 @@ export default {
                 .call(d3.axisLeft(y));
 
             var data = [];
+            var b_data = []
             for (const [key, value] of Object.entries(scatter_data)) {
-                data.push({ stars: value.stars, review_count: value.review_count, useful: value.useful, id: key });
+                if(key != this.business_id)
+                    data.push({ stars: value.stars, review_count: value.review_count, useful: value.useful, id: key });
+                else
+                    b_data.push({ stars: value.stars, review_count: value.review_count, useful: value.useful, id: key });
             }
             // Color scale: give me a specie name, I return a color
             // Add dots
@@ -127,10 +131,17 @@ export default {
                     }
                     
                 })
-                // .on("click", function (d, i) {
-                //     this.businessId = i.business_id
-                // })
-            
+            svg.append('g')
+                .selectAll("dot")
+                .data(b_data)
+                .enter()
+                .append("circle")
+                .attr("cx", (d) => x(d.useful))
+                .attr("cy", (d) => y(d.review_count))
+                .attr("r", (d) => {
+                    return 4
+                })
+                .attr("fill", "#d7191c")
         },
     },
 };
