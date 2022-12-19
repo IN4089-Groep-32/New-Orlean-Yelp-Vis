@@ -85,7 +85,6 @@ body {
 }
 
 svg text {
-    fill: black;
     text-anchor: end;
 }
 
