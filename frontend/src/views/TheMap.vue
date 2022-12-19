@@ -104,7 +104,7 @@ export default {
             streamWidth: 0,
             svgMargin: { top: 10, right: 30, bottom: 30, left: 60 },
             comp: "star",
-            biz_id: '_393npnr0Dw1aGKy83x_0A',
+            biz_id: '6a4gLLFSgr-Q6CZXDLzBGQ',
             name: 'a store',
             geoJsonObj:
             {
