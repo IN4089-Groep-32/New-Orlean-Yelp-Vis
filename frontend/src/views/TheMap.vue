@@ -242,6 +242,7 @@ export default {
 
             this.map.addLayer(vectorLayer);
             this.map.addLayer(heatmapLayer);
+            heatmapLayer.setVisible(false);
             this.map.on('click', (evt) => {
                 if (this.map.forEachFeatureAtPixel(evt.pixel,
                     function (feat) {
