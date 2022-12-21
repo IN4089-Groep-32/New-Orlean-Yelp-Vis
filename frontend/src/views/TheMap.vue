@@ -1,6 +1,13 @@
 <template>
     <div>
         <!-- <img class="mb-3" src="@/assets/GreyBox.svg" alt="Default Grey Box" /> -->
+        <div>
+            <b-form-checkbox v-model="hmTo" ref="hmToggle" name="hmToggle" value="show" unchecked-value="hidden"
+                @change="toggleLayer()">
+                Toggle the heatmap
+            </b-form-checkbox>
+        </div>
+        <div> The heatmap is : <strong>{{ hmTo }}</strong></div>
         <div ref="map" class="map"></div>
         <div ref="graph" class="graph">
             <p>The chosen restaurant names: {{ this.name }}</p>
@@ -23,22 +30,26 @@
                 <div class="plot-content">
                     <p>star plot</p>
                     <div id="star_container" class="svg-container" style="width: 100%">
-                        <StarComponent :key=this.biz_id :business_id="business_id" :svgWidth="svgWidth" v-if="star_comp" />
+                        <StarComponent :key=this.biz_id :business_id="business_id" :svgWidth="svgWidth"
+                            v-if="star_comp" />
                     </div>
-                    <hr/>
+                    <hr />
                     <p>box plot</p>
                     <div id="star_container" class="svg-container" style="width: 100%">
-                        <BoxComponent style="width: 100%" :key=this.biz_id :business_id="business_id" :svgWidth="svgWidth" v-if="box_comp" />
+                        <BoxComponent style="width: 100%" :key=this.biz_id :business_id="business_id"
+                            :svgWidth="svgWidth" v-if="box_comp" />
                     </div>
-                    <hr/>
+                    <hr />
                     <p>word stream</p>
                     <div id="stream_container" class="svg-container" style="width: 100%">
-                        <WordstreamComponent :business_id="business_id" :key=this.biz_id :svgWidth="streamWidth" v-if="word_comp" />
+                        <WordstreamComponent :business_id="business_id" :key=this.biz_id :svgWidth="streamWidth"
+                            v-if="word_comp" />
                     </div>
-                    <hr/>
+                    <hr />
                     <p>scatter plot</p>
                     <div id="stream_container" class="svg-container" style="width: 100%">
-                        <ScatterPlotComponent :business_id="business_id" :key=this.biz_id :svgWidth="streamWidth" v-if="scatter_comp" />
+                        <ScatterPlotComponent :business_id="business_id" :key=this.biz_id :svgWidth="streamWidth"
+                            v-if="scatter_comp" />
                     </div>
                 </div>
             </div>
@@ -54,7 +65,7 @@
 import View from "ol/View";
 import Map from "ol/Map";
 import TileLayer from "ol/layer/Tile";
-import {Heatmap as HeatmapLayer} from "ol/layer";
+import { Heatmap as HeatmapLayer } from "ol/layer";
 import OSM from "ol/source/OSM";
 import { fromLonLat } from "ol/proj";
 import "ol/ol.css";
@@ -62,8 +73,6 @@ import { Vector as VectorLayer } from "ol/layer";
 import { Vector as VectorSource } from "ol/source";
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 import Overlay from 'ol/Overlay';
-// import { toLonLat } from 'ol/proj';
-// import { toStringHDMS } from 'ol/coordinate';
 import GeoJSON from 'ol/format/GeoJSON';
 import CONSTANTS from '../constants';
 import StarComponent from "@/components/StarComponent";
@@ -100,6 +109,8 @@ export default {
     },
     data() {
         return {
+            map: {},
+            hmTo: "hidden",
             svgWidth: 0,
             streamWidth: 0,
             svgMargin: { top: 10, right: 30, bottom: 30, left: 60 },
@@ -146,6 +157,10 @@ export default {
     },
 
     methods: {
+        toggleLayer() {
+            var layer = this.map.getAllLayers();
+            layer[2].setVisible(!layer[2].getVisible());
+        },
         fetch_geojson() {
             fetch(CONSTANTS.PRECOMPUTED_DATA.GEO + "/geo.json")
                 .then(response => {
@@ -180,7 +195,7 @@ export default {
                 closer.blur();
                 return false;
             };
-            var map = new Map({
+            this.map = new Map({
                 target: this.$refs['map'],
                 layers: [new TileLayer({ source: new OSM() })],
                 view: new View({
@@ -215,7 +230,7 @@ export default {
                 style: () => style,
             });
 
-            const heatmapLayer = new HeatmapLayer({
+            var heatmapLayer = new HeatmapLayer({
                 source: vectorSource,
                 blur: 100,
                 radius: 10,
@@ -225,17 +240,17 @@ export default {
                 },
             });
 
-            map.addLayer(vectorLayer);
-            map.addLayer(heatmapLayer);
-            map.on('click', (evt) => {
-                if (map.forEachFeatureAtPixel(evt.pixel,
+            this.map.addLayer(vectorLayer);
+            this.map.addLayer(heatmapLayer);
+            this.map.on('click', (evt) => {
+                if (this.map.forEachFeatureAtPixel(evt.pixel,
                     function (feat) {
                         return fromJsonFeatures.includes(feat);
                     })
                 ) {
                     var name = ""
                     var business_id = ""
-                    map.forEachFeatureAtPixel(evt.pixel, function (feat) {
+                    this.map.forEachFeatureAtPixel(evt.pixel, function (feat) {
                         name = feat.get('name');
                         business_id = feat.get('business_id');
                     });
@@ -252,7 +267,7 @@ export default {
                     // console.log(this.biz_id)
                     // const graph = this.$refs.graph;
                     // this.comp = "star";
-                    
+
                     // content.innerHTML = '<p>You choosed: </p><a href=/review/' + business_id + '/' + name + '>' + name + '</a > ';
                     overlay.setPosition(coordinate);
                 }
@@ -267,7 +282,7 @@ export default {
     position: absolute;
     left: 0px;
     width: 50%;
-    height:100%;
+    height: 100%;
 }
 
 .graph {

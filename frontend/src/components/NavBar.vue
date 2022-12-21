@@ -1,7 +1,4 @@
-//TODO Web Template Studio: Add a new link in the NavBar for your page here. 
-// A skip link is included as an accesibility best practice. For more information visit https://www.w3.org/WAI/WCAG21/Techniques/general/G1. 
 <template>
-
     <div>
         <nav class="navbar navbar-light bg-light p-3">
                 <div class="container-fluid">
@@ -30,10 +27,6 @@
                     </div>
                 </div>
             </nav>
-        <!-- <div class="navbar navbar-expand-sm navbar-light border-bottom justify-content-between">
-            <a class="navbar-brand" href="/" role="heading" aria-level="1">Map</a>
-            
-        </div> -->
     </div>
 </template> 
  
